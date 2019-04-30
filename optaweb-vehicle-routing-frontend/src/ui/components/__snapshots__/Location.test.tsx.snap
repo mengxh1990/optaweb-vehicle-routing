@@ -12,11 +12,23 @@ exports[`Location Component should render correctly 1`] = `
     className=""
     width={4}
   >
-    <span
-      aria-labelledby="aria-10"
+    <Tooltip
+      appendTo={[Function]}
+      className={null}
+      content="x"
+      enableFlip={true}
+      entryDelay={500}
+      exitDelay={500}
+      maxWidth="12.5rem"
+      position="top"
+      zIndex={9999}
     >
-      Location 10
-    </span>
+      <span
+        aria-labelledby="aria-10"
+      >
+        x
+      </span>
+    </Tooltip>
   </DataListCell>
   <DataListCell
     className=""
