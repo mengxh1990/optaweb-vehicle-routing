@@ -39,9 +39,9 @@ import org.optaplanner.examples.vehiclerouting.domain.Standstill;
 import org.optaplanner.examples.vehiclerouting.domain.VehicleRoutingSolution;
 import org.optaweb.vehiclerouting.domain.LatLng;
 import org.optaweb.vehiclerouting.domain.Location;
-import org.optaweb.vehiclerouting.domain.Route;
 import org.optaweb.vehiclerouting.service.location.DistanceMatrix;
 import org.optaweb.vehiclerouting.service.route.RouteChangedEvent;
+import org.optaweb.vehiclerouting.service.route.ShallowRoute;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.task.AsyncTaskExecutor;
 
@@ -132,11 +132,11 @@ public class RouteOptimizerImplTest {
         verify(eventPublisher).publishEvent(routeChangedEventArgumentCaptor.capture());
         RouteChangedEvent event = routeChangedEventArgumentCaptor.getValue();
 
-        assertThat(event.depot()).contains(location1);
+        assertThat(event.depot()).contains(location1.getId());
         assertThat(event.routes()).isNotEmpty();
-        for (Route route : event.routes()) {
-            assertThat(route.depot()).isEqualTo(location1);
-            assertThat(route.visits()).containsExactly(location2);
+        for (ShallowRoute route : event.routes()) {
+            assertThat(route.depotId()).isEqualTo(location1.getId());
+            assertThat(route.visitIds()).containsExactly(location2.getId());
         }
     }
 
@@ -148,11 +148,11 @@ public class RouteOptimizerImplTest {
         RouteChangedEvent event = routeChangedEventArgumentCaptor.getValue();
 
         assertThat(solver.isSolving()).isFalse();
-        assertThat(event.depot()).contains(location1);
+        assertThat(event.depot()).contains(location1.getId());
         assertThat(event.routes()).hasSameSizeAs(SolutionUtil.initialSolution().getVehicleList());
-        for (Route route : event.routes()) {
-            assertThat(route.depot()).isEqualTo(location1);
-            assertThat(route.visits()).isEmpty();
+        for (ShallowRoute route : event.routes()) {
+            assertThat(route.depotId()).isEqualTo(location1.getId());
+            assertThat(route.visitIds()).isEmpty();
         }
     }
 
@@ -205,7 +205,7 @@ public class RouteOptimizerImplTest {
         SolutionUtil.moveAllVehiclesTo(solution, depot);
         Customer customer = SolutionUtil.addCustomer(solution, planningLocation(location2));
         solution.getVehicleList().forEach(vehicle -> vehicle.setNextCustomer(customer));
-        assertThat(SolutionUtil.routes(solution)).allMatch(route -> route.visits().size() == 1);
+        assertThat(SolutionUtil.routes(solution)).allMatch(shallowRoute -> shallowRoute.visitIds().size() == 1);
         solution.setScore(HardSoftLongScore.ofSoft(-1000)); // set non-zero travel distance
 
         // Start solver by adding two locations
@@ -229,8 +229,8 @@ public class RouteOptimizerImplTest {
         assertThat(event.distance()).isEqualTo("0h 0m 0s"); // expect zero travel distance
         assertThat(event.depot()).isPresent();
         assertThat(event.routes()).hasSameSizeAs(solution.getVehicleList());
-        for (Route route : event.routes()) {
-            assertThat(route.visits()).isEmpty();
+        for (ShallowRoute route : event.routes()) {
+            assertThat(route.visitIds()).isEmpty();
         }
     }
 

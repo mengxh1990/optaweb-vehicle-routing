@@ -20,8 +20,6 @@ import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.optaweb.vehiclerouting.domain.Location;
-import org.optaweb.vehiclerouting.domain.Route;
 import org.springframework.context.ApplicationEvent;
 
 /**
@@ -31,8 +29,8 @@ import org.springframework.context.ApplicationEvent;
 public class RouteChangedEvent extends ApplicationEvent {
 
     private final String distance;
-    private final Location depot;
-    private final Collection<Route> routes;
+    private final Long depot;
+    private final Collection<ShallowRoute> routes;
 
     /**
      * Create a new ApplicationEvent.
@@ -41,7 +39,7 @@ public class RouteChangedEvent extends ApplicationEvent {
      * @param depot depot location. May be null if there are no locations.
      * @param routes vehicle routes
      */
-    public RouteChangedEvent(Object source, String distance, Location depot, Collection<Route> routes) {
+    public RouteChangedEvent(Object source, String distance, Long depot, Collection<ShallowRoute> routes) {
         super(source);
         this.distance = Objects.requireNonNull(distance);
         this.depot = depot;
@@ -52,7 +50,7 @@ public class RouteChangedEvent extends ApplicationEvent {
      * Routes of all vehicles.
      * @return vehicle routes
      */
-    public Collection<Route> routes() {
+    public Collection<ShallowRoute> routes() {
         return routes;
     }
 
@@ -64,7 +62,7 @@ public class RouteChangedEvent extends ApplicationEvent {
      * The depot location.
      * @return depot location
      */
-    public Optional<Location> depot() {
+    public Optional<Long> depot() {
         return Optional.ofNullable(depot);
     }
 }
