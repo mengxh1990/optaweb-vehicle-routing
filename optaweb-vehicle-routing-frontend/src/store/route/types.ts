@@ -27,6 +27,7 @@ export interface LatLngWithDescription extends LatLng {
 
 export interface Location extends LatLng {
   readonly id: number;
+  readonly description?: string;
 }
 
 export interface Route {

@@ -29,7 +29,7 @@ export interface TspMapProps {
 }
 
 // TODO unlimited unique (random) colors
-const colors = ['deepskyblue', 'crimson', 'seagreen', 'slateblue', 'gold', 'darkorange'];
+const colors = ['deepskyblue', 'crimson', 'seagreen', 'slateblue', 'darkred', 'darkorange'];
 
 function color(index: number) {
   return colors[index % colors.length];

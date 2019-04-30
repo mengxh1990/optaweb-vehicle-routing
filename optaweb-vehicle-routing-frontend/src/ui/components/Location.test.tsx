@@ -23,6 +23,7 @@ describe('Location Component', () => {
   it('should render correctly', () => {
     const props: LocationProps = {
       id: 10,
+      description: 'x',
       removeDisabled: false,
       removeHandler: jest.fn(),
       selectHandler: jest.fn(),

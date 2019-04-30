@@ -45,6 +45,7 @@ const searchParams = (props: Props) => ({
     [props.boundingBox[0].lng, props.boundingBox[0].lat, props.boundingBox[1].lng, props.boundingBox[1].lat]
     : undefined,
   bounded: !!props.boundingBox,
+  limit: 200,
 });
 
 class SearchBox extends React.Component<Props, State> {
@@ -109,7 +110,7 @@ class SearchBox extends React.Component<Props, State> {
   }
 
   handleClick(index: number) {
-    this.props.addHandler(this.state.results[index]);
+    this.state.results.forEach(value => this.props.addHandler(value));
     this.setState({
       query: '',
       results: [],
